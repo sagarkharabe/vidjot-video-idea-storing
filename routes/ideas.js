@@ -54,11 +54,11 @@ router.post('/', (req, res) => {
         });
     }
     else {
-        const newUser = {
+        const newIdea = {
             title: req.body.title,
             details: req.body.details
         }
-        new Idea(newUser)
+        new Idea(newIdea)
             .save()
             .then(idea => {
                 req.flash('success_msg',"New Video Idea added")
@@ -82,7 +82,7 @@ router.put('/:id', (req, res) => {
             _id: req.params.id
         })
             .then(idea => {
-                res.render('/ideas/edit', {
+                res.redirect('/ideas/edit', {
                     idea: idea,
                     errors: errors,
                 })

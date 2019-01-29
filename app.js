@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
@@ -6,6 +7,8 @@ const exphbs = require('express-handlebars');
 const methodOverride = require('method-override')
 const flash = require('connect-flash');
 const session = require('express-session')
+
+
 
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
@@ -25,6 +28,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname,'public')))
 app.use(methodOverride('_method'))
 app.use(session({
     secret: 'secret',
