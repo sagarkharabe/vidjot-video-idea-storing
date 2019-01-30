@@ -38,9 +38,7 @@ router.post('/register', (req, res) => {
             .then(user => {
                 if (user) {
                     req.flash('error_msg', "Email already registered")
-                    res.redirect('/users/register',{
-                        name : req.body.name
-                    });
+                    res.redirect('/users/register');
                 } else {
                     const newUser = {
                         name: req.body.name,
