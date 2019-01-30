@@ -10,7 +10,7 @@ router.get('/login', (req, res) => {
     res.render('users/login')
 })
 router.get('/register', (req, res) => {
-    res.redirect('/users/register')
+    res.render('users/register')
 })
 
 router.post('/login',(req,res,next) =>{
@@ -49,12 +49,8 @@ router.post('/register', (req, res) => {
             })
             .then(user => {
                 if (user) {
-                    res.locals.success_msg = 'Email already registered"';
-                   
-                    res.render('users/register',{
-                        name:req.body.name,
-                        email:req.body.email
-                    });
+                    req.flash('error_msg', 'Email already registered');
+                    res.redirect('/users/register');
                 } else {
                     const newUser = {
                         name: req.body.name,

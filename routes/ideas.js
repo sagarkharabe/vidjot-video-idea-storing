@@ -6,7 +6,7 @@ const Idea = mongoose.model('Ideas');
 const {ensureAuthenticated} = require('../helpers/auth')
 
 
-router.get('/', (req, res) => {
+router.get('/',ensureAuthenticated, (req, res) => {
     Idea.find({})
         .sort({ date: 'desc' })
         .then(ideas => {

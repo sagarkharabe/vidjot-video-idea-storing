@@ -64,10 +64,6 @@ app.get('/about', (req, res) => {
 })
 
 
-app.get('/about', (req, res) => {
-    res.render('about');
-})
-
 app.use('/users', users)
 app.use('/ideas', ideas)
 const port = 3000;
