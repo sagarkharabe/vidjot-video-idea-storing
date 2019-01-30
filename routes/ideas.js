@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 require('../models/index');
 const Idea = mongoose.model('Ideas');
-
+const {ensureAuthenticated} = require('../helpers/auth')
 
 
 router.get('/', (req, res) => {
@@ -17,11 +17,12 @@ router.get('/', (req, res) => {
 })
 
 
-router.get('/add', (req, res) => {
+router.get('/add',ensureAuthenticated, (req, res) => {
+    console.log("##", req.body)
     res.render('ideas/add')
 })
 
-router.get('/edit/:id', (req, res) => {
+router.get('/edit/:id',ensureAuthenticated, (req, res) => {
     Idea.findOne({
         _id: req.params.id
     })
@@ -33,7 +34,7 @@ router.get('/edit/:id', (req, res) => {
         })
 
 })
-router.post('/', (req, res) => {
+router.post('/',ensureAuthenticated, (req, res) => {
     // checking empty field on server side
     let errors = [];
     if (!req.body.title) {
@@ -47,10 +48,10 @@ router.post('/', (req, res) => {
 
     }
     if (errors.length > 0) {
-        res.render('/add', {
-            errors: errors,
-            title: req.body.title,
-            details: req.body.details
+        res.render('ideas/add', {
+            errors :errors,
+            title:req.body.title,
+            details:req.body.details
         });
     }
     else {
@@ -67,7 +68,7 @@ router.post('/', (req, res) => {
     }
 
 })
-router.put('/:id', (req, res) => {
+router.put('/:id',ensureAuthenticated, (req, res) => {
     let errors = [];
     let str = req.body.details.length == 0 ? true : false;
     console.log(str)
@@ -82,7 +83,7 @@ router.put('/:id', (req, res) => {
             _id: req.params.id
         })
             .then(idea => {
-                res.redirect('/ideas/edit', {
+                res.render('ideas/edit', {
                     idea: idea,
                     errors: errors,
                 })
@@ -104,7 +105,7 @@ router.put('/:id', (req, res) => {
             })
     }
 })
-router.delete('/:id', (req, res) => {
+router.delete('/:id',ensureAuthenticated, (req, res) => {
     Idea.deleteOne({ _id: req.params.id })
         .then(() => {
             req.flash('success_msg' ,"Video idea removed");
