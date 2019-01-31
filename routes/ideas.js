@@ -7,7 +7,8 @@ const {ensureAuthenticated} = require('../helpers/auth')
 
 
 router.get('/',ensureAuthenticated, (req, res) => {
-    Idea.find({})
+     var user = req.user;
+    Idea.find({userID : user._id})
         .sort({ date: 'desc' })
         .then(ideas => {
             res.render('ideas/index', {
@@ -16,9 +17,8 @@ router.get('/',ensureAuthenticated, (req, res) => {
         })
 })
 
-
 router.get('/add',ensureAuthenticated, (req, res) => {
-    console.log("##", req.body)
+    
     res.render('ideas/add')
 })
 
@@ -36,6 +36,7 @@ router.get('/edit/:id',ensureAuthenticated, (req, res) => {
 })
 router.post('/',ensureAuthenticated, (req, res) => {
     // checking empty field on server side
+    var user = req.user;
     let errors = [];
     if (!req.body.title) {
         errors.push({ text: 'Please add a title' })
@@ -57,7 +58,8 @@ router.post('/',ensureAuthenticated, (req, res) => {
     else {
         const newIdea = {
             title: req.body.title,
-            details: req.body.details
+            details: req.body.details,
+            userID : user._id
         }
         new Idea(newIdea)
             .save()

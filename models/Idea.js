@@ -9,11 +9,16 @@ const ideaSchema = new mongoose.Schema({
         type : String,
         require : true
     },
+    
+    userID : {
+        type : String,
+        required: true
+    },
     date : {
         type: Date,
         default : Date.now
 
-    }
+    },
 });
 
 var IdeaModel = mongoose.model('Ideas',ideaSchema)
